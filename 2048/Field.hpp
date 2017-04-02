@@ -1,0 +1,45 @@
+#pragma once
+#include <vector>
+
+template <size_t FieldSize = 4, typename Type = short>
+class Field {
+protected:
+	Type m_cells[FieldSize * FieldSize];
+public:
+	explicit Field() {
+		clear();
+	}
+	~Field() {}
+	inline void clear() {
+		for (size_t i = 0; i < FieldSize * FieldSize; i++)
+			m_cells[i] = Type(0);
+	}
+	inline size_t countEmpty() {
+		size_t res = 0;
+		for (size_t i = 0; i < FieldSize * FieldSize; i++)
+			if (m_cells[i] == Type(0))
+				res++;
+		return res;
+	}
+
+	inline std::vector<Type*> getEmptyCells() {
+		std::vector<Type*> res;
+		for (size_t i = 0; i < FieldSize * FieldSize; i++)
+			if (m_cells[i] == Type(0))
+				res.push_back(&m_cells[i]);
+		return res;
+	}
+
+	inline Type& operator()(const size_t& i, const size_t& j) {
+		return m_cells[i * FieldSize + j];
+	}
+	inline Type& at(const size_t& i, const size_t& j) {
+		return (*this)(i, j);
+	}
+	inline const Type& operator()(const size_t& i, const size_t& j) const {
+		return m_cells[i * FieldSize + j];
+	}
+	inline const Type& at(const size_t& i, const size_t& j) const {
+		return (*this)(i, j);
+	}
+};
