@@ -1,4 +1,5 @@
 #pragma once
+#include "SharedObjects.hpp"
 #include "Field.hpp"
 
 #include "qstring.h"
@@ -18,7 +19,8 @@ public:
 		for (size_t i = 0; i < FieldSize; i++)
 			for (size_t j = 0; j < FieldSize; j++) {
 				m_elements[i][j] = new Element(generateValue(m_field->at(i, j)));
-				m_elements[i][j]->setMinimumSize(20, 20);
+				m_elements[i][j]->setMinimumSize(80, 80);
+				m_elements[i][j]->setFont(SharedObjects::defaultFont);
 				m_elements[i][j]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 				m_layout->addWidget(m_elements[i][j], i, j, 1, 1);
 			}

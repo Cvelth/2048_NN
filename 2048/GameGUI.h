@@ -6,6 +6,7 @@
 
 #include "FieldWidget.hpp"
 #include "GameCore.hpp"
+#include "GameCollector.hpp"
 
 class GameGUI : public QWidget
 {
@@ -22,11 +23,14 @@ private:
 
 	QPushButton* newGame;
 	QPushButton* exit;
+	QPushButton* collectButton;
 	QHBoxLayout* buttons;
 
 	GameCore<4>* core;
 	FieldWidget<4>* field;
 	QVBoxLayout* layout;
+
+	GameCollector<4>* collector;
 
 protected:
 	virtual bool eventFilter(QObject *obj, QEvent *event) override;

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <ostream>
 
 template <size_t FieldSize = 4, typename Type = short>
 class Field {
@@ -42,4 +43,13 @@ public:
 	inline const Type& at(const size_t& i, const size_t& j) const {
 		return (*this)(i, j);
 	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Field<FieldSize, Type>& dt);
 };
+
+template <size_t FieldSize = 4, typename Type = short>
+std::ostream& operator<<(std::ostream& os, const Field<FieldSize, Type>& f) {
+	for (size_t i = 0; i < FieldSize * FieldSize; i++)
+		os << f.m_cells[i];
+	return os;
+}

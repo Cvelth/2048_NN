@@ -11,6 +11,9 @@
     <ClCompile Include="GameGUI.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="SharedObjects.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Generated Files">
@@ -34,6 +37,9 @@
     <Filter Include="Core">
       <UniqueIdentifier>{0ad509ec-4c26-4c23-8750-36008f0abb03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Storing">
+      <UniqueIdentifier>{5066eab6-aefa-4509-97ae-7df1d979f8ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="GameGUI.h">
@@ -52,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="Field.hpp">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedObjects.hpp">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCollector.hpp">
+      <Filter>Storing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
