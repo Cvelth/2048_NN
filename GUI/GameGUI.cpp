@@ -1,29 +1,28 @@
-#include "GameGUI.h"
+#include "GameGUI.hpp"
 #include "QEvent.h"
 
 GameGUI::GameGUI(QWidget *parent)
-	: QWidget(parent)
-{
+	: QWidget(parent) {
 	currentScore = new QLineEdit("0");
 	currentScore->setReadOnly(true);
-	currentScore->setFont(SharedObjects::defaultFont);
+	currentScore->setFont(Settings::defaultFont);
 	currentScore->setAlignment(Qt::AlignRight);
 	maxScore = new QLineEdit("0");
 	maxScore->setReadOnly(true);
-	maxScore->setFont(SharedObjects::defaultFont);
+	maxScore->setFont(Settings::defaultFont);
 	maxScore->setAlignment(Qt::AlignRight);
 	score = new QHBoxLayout();
 	score->addWidget(currentScore);
 	score->addWidget(maxScore);
 
 	newGame = new QPushButton("Restart");
-	newGame->setFont(SharedObjects::defaultFont);
+	newGame->setFont(Settings::defaultFont);
 	connect(newGame, &QPushButton::clicked, this, &GameGUI::restart);
 	exit = new QPushButton("Exit");
-	exit->setFont(SharedObjects::defaultFont);
+	exit->setFont(Settings::defaultFont);
 	connect(exit, &QPushButton::clicked, this, &GameGUI::close);
 	collectButton = new QPushButton("Collect game data");
-	collectButton->setFont(SharedObjects::defaultFont);
+	collectButton->setFont(Settings::defaultFont);
 	collectButton->setCheckable(true);
 	buttons = new QHBoxLayout();
 	buttons->addWidget(newGame);

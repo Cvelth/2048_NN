@@ -8,8 +8,7 @@
 #include "GameCore.hpp"
 #include "GameCollector.hpp"
 
-class GameGUI : public QWidget
-{
+class GameGUI : public QWidget {
 	Q_OBJECT
 
 public:
@@ -35,7 +34,7 @@ private:
 protected:
 	virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
-protected slots:
+	protected slots:
 	void restart();
 	void updateScore();
 };

@@ -2,7 +2,7 @@
 #include "Field.hpp"
 
 enum class Move {
-	Left, Right, Up, Down
+	Left = 1, Right = 2, Up = 3, Down = 4
 };
 
 template<size_t FieldSize = 4>
@@ -18,16 +18,7 @@ public:
 	~GameCollector() {
 		m_file.close();
 	}
-
 	void saveMove(Move move) {
-		m_file << m_field << convertMove(move);
-	}
-	size_t convertMove(Move move) {
-		switch (move) {
-			case Move::Left: return 1;
-			case Move::Right: return 2;
-			case Move::Up: return 3;
-			case Move::Down: return 4;
-		}
+		m_file << m_field << uint8_t(move);
 	}
 };

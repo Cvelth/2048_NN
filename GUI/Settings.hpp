@@ -1,6 +1,5 @@
 #pragma once
 #include "QFont.h"
-
-namespace SharedObjects {
+namespace Settings {
 	extern const QFont& defaultFont;
 }

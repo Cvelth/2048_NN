@@ -1,6 +1,6 @@
 #pragma once
+#include "RandomDevice.hpp"
 #include "Field.hpp"
-#include "Include.hpp"
 #include "fstream"
 
 template<size_t FieldSize = 4>
@@ -14,7 +14,7 @@ protected:
 	size_t m_record;
 
 public:
-	explicit GameCore(){
+	explicit GameCore() {
 		std::ifstream f("maximum.dat");
 		if (f.good())
 			f >> m_record;
@@ -22,7 +22,7 @@ public:
 			m_record = 0;
 		restart();
 	}
-	~GameCore(){
+	~GameCore() {
 		std::ofstream f("maximum.dat");
 		f << m_record;
 	}
@@ -31,8 +31,7 @@ public:
 		auto cells = m_field.getEmptyCells();
 		if (cells.size() != 0) {
 			*cells.at(m_random.array(cells.size())) = m_random.item();
-		}
-		else
+		} else
 			m_isOver = true;
 	}
 	void down() {
@@ -56,7 +55,7 @@ public:
 				m_field.at(0, i) = 0;
 				st = true;
 			}
-			
+
 			if (m_field.at(3, i) == m_field.at(2, i) && m_field.at(3, i) != 0) {
 				scoreInc(++m_field.at(3, i));
 				m_field.at(2, i) = m_field.at(1, i);
@@ -85,34 +84,34 @@ public:
 				m_field.at(i, 2) = m_field.at(i, 3);
 				m_field.at(i, 3) = 0;
 				st = true;
-			}								  
-			if (m_field.at(i, 1) == 0) {	  
+			}
+			if (m_field.at(i, 1) == 0) {
 				m_field.at(i, 1) = m_field.at(i, 2);
 				m_field.at(i, 2) = m_field.at(i, 3);
 				m_field.at(i, 3) = 0;
 				st = true;
-			}								   
-			if (m_field.at(i, 0) == 0) {	   
+			}
+			if (m_field.at(i, 0) == 0) {
 				m_field.at(i, 0) = m_field.at(i, 1);
 				m_field.at(i, 1) = m_field.at(i, 2);
 				m_field.at(i, 2) = m_field.at(i, 3);
 				m_field.at(i, 3) = 0;
 				st = true;
-			}				
-							
+			}
+
 			if (m_field.at(i, 0) == m_field.at(i, 1) && m_field.at(i, 0) != 0) {
 				scoreInc(++m_field.at(i, 0));
 				m_field.at(i, 1) = m_field.at(i, 2);
 				m_field.at(i, 2) = m_field.at(i, 3);
 				m_field.at(i, 3) = 0;
 				st = true;
-			}				
+			}
 			if (m_field.at(i, 1) == m_field.at(i, 2) && m_field.at(i, 1) != 0) {
 				scoreInc(++m_field.at(i, 1));
 				m_field.at(i, 2) = m_field.at(i, 3);
 				m_field.at(i, 3) = 0;
 				st = true;
-			}				
+			}
 			if (m_field.at(i, 2) == m_field.at(i, 3) && m_field.at(i, 2) != 0) {
 				scoreInc(++m_field.at(i, 2));
 				m_field.at(i, 3) = 0;
@@ -128,28 +127,28 @@ public:
 				m_field.at(i, 1) = m_field.at(i, 0);
 				m_field.at(i, 0) = 0;
 				st = true;
-			}				
+			}
 			if (m_field.at(i, 2) == 0) {
 				m_field.at(i, 2) = m_field.at(i, 1);
 				m_field.at(i, 1) = m_field.at(i, 0);
 				m_field.at(i, 0) = 0;
 				st = true;
-			}				
+			}
 			if (m_field.at(i, 3) == 0) {
 				m_field.at(i, 3) = m_field.at(i, 2);
 				m_field.at(i, 2) = m_field.at(i, 1);
 				m_field.at(i, 1) = m_field.at(i, 0);
 				m_field.at(i, 0) = 0;
 				st = true;
-			}				
-							
+			}
+
 			if (m_field.at(i, 3) == m_field.at(i, 2) && m_field.at(i, 3) != 0) {
 				scoreInc(++m_field.at(i, 3));
 				m_field.at(i, 2) = m_field.at(i, 1);
 				m_field.at(i, 1) = m_field.at(i, 0);
 				m_field.at(i, 0) = 0;
 				st = true;
-			}				
+			}
 			if (m_field.at(i, 2) == m_field.at(i, 1) && m_field.at(i, 2) != 0) {
 				scoreInc(++m_field.at(i, 2));
 				m_field.at(i, 1) = m_field.at(i, 0);

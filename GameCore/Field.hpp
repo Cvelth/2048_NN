@@ -7,9 +7,7 @@ class Field {
 protected:
 	Type m_cells[FieldSize * FieldSize];
 public:
-	explicit Field() {
-		clear();
-	}
+	explicit Field() { clear();	}
 	~Field() {}
 	inline void clear() {
 		for (size_t i = 0; i < FieldSize * FieldSize; i++)
