@@ -15,28 +15,30 @@ int main(int argc, char** argv) {
 			while (!core.isOver()) {
 				auto f = core.getField()->getNormalizedCellValues();
 				auto o = calculate(f);
+				bool turn = false;
 				if (o[0] > o[1])
 					if (o[0] > o[2])
 						if (o[0] > o[3])
-							core.up();
+							turn = core.up();
 						else
-							core.right();
+							turn = core.right();
 					else
 						if (o[2] > o[3])
-							core.left();
+							turn = core.left();
 						else
-							core.right();
+							turn = core.right();
 				else
 					if (o[1] > o[2])
 						if (o[1] > o[3])
-							core.down();
+							turn = core.down();
 						else
-							core.right();
+							turn = core.right();
 					else
 						if (o[2] > o[3])
-							core.left();
+							turn = core.left();
 						else
-							core.right();
+							turn = core.right();
+				if (!turn) break;
 			}
 			return core.score();
 		}, 16, 4, 32, 2);
