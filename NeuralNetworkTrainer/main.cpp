@@ -20,11 +20,11 @@ int main(int argc, char** argv) {
 	size_t generations = 10, networks_per_generation = 100;
 	if (argc >= 3) {
 		std::stringstream s(argv[2]);
-		s << generations;
+		s >> generations;
 	}
 	if (argc >= 4) {
 		std::stringstream s(argv[3]);
-		s << networks_per_generation;
+		s >> networks_per_generation;
 	}
 
 	if (folder_name != "") {
@@ -64,27 +64,31 @@ int main(int argc, char** argv) {
 		}, 16, 4, 32, 2);
 
 		em.newPopulation();
-		std::experimental::filesystem::create_directory(folder_name);
-		for (size_t i = 0; i < generations; i++) {
-			std::stringstream s;
-			s << ".\\" << folder_name << "\\generation_" << i;
-			std::experimental::filesystem::create_directory(s.str());
-			s << "\\unit_";
-			auto filename = s.str();
-			s.str("");
-
-			em.testPopulation(true);
-			size_t j = 0;
-			for (auto it : *em) {
-				s << j++ << "_" << it.first << ".mnn";
-				mnn::save_to_file(filename + s.str(), it.second);
+		try {
+			std::experimental::filesystem::remove_all("./" + folder_name);
+			std::experimental::filesystem::create_directory(folder_name);
+			for (size_t i = 0; i < generations; i++) {
+				std::stringstream s;
+				s << "./" << folder_name << "/generation_" << i;
+				std::experimental::filesystem::create_directory(s.str());
+				s << "/unit_";
+				auto filename = s.str();
 				s.str("");
-			}
-			em.populationSelection();
-			em.recreatePopulation();
-			em.mutatePopulation(.2f, .5f);
-		}
 
+				em.testPopulation(true);
+				size_t j = 0;
+				for (auto it : *em) {
+					s << j++ << "_" << it.first << ".mnn";
+					mnn::save_to_file(filename + s.str(), it.second);
+					s.str("");
+				}
+				em.populationSelection();
+				em.recreatePopulation();
+				em.mutatePopulation(.2f, .5f);
+			}
+		} catch (std::exception &e) {
+			std::cout << e.what();
+		}
 	} else
 		std::cout << "Unsupported parameter was passed.\n";
 	return 0;
