@@ -1,8 +1,6 @@
 #include "GameGUI.hpp"
 #include "QEvent.h"
-
-GameGUI::GameGUI(QWidget *parent)
-	: QWidget(parent) {
+GameGUI::GameGUI(QWidget *parent) : QWidget(parent), control_blocked(false) {
 	currentScore = new QLineEdit("0");
 	currentScore->setReadOnly(true);
 	currentScore->setFont(Settings::defaultFont);
@@ -24,6 +22,9 @@ GameGUI::GameGUI(QWidget *parent)
 	collectButton = new QPushButton("Collect game data");
 	collectButton->setFont(Settings::defaultFont);
 	collectButton->setCheckable(true);
+	loadNetworkButton = new QPushButton("Load network file");
+	loadNetworkButton->setFont(Settings::defaultFont);
+	connect(loadNetworkButton, &QPushButton::clicked, this, &GameGUI::loadNetwork);
 	buttons = new QHBoxLayout();
 	buttons->addWidget(newGame);
 	buttons->addWidget(exit);
@@ -37,6 +38,7 @@ GameGUI::GameGUI(QWidget *parent)
 	layout->addWidget(field);
 	layout->addLayout(buttons);
 	layout->addWidget(collectButton);
+	layout->addWidget(loadNetworkButton);
 
 	setLayout(layout);
 
@@ -44,7 +46,6 @@ GameGUI::GameGUI(QWidget *parent)
 
 	updateScore();
 }
-
 GameGUI::~GameGUI() {
 	delete field;
 	delete core;
@@ -56,16 +57,18 @@ GameGUI::~GameGUI() {
 	delete exit;
 	delete buttons;
 	delete layout;
-}
 
+	if (network) delete network;
+}
 void GameGUI::restart() {
+	control_blocked = false;
 	core->restart();
 	//To implement
 	field->update();
 }
 
 bool GameGUI::eventFilter(QObject *o, QEvent *ev) {
-	if (ev->type() == QEvent::KeyPress) {
+	if (!control_blocked && ev->type() == QEvent::KeyPress) {
 		switch (static_cast<QKeyEvent*>(ev)->key()) {
 			case Qt::Key::Key_Down:
 			case Qt::Key::Key_S:
@@ -110,4 +113,61 @@ void GameGUI::updateScore() {
 		currentScore->setStyleSheet("QLineEdit { background: rgb(255, 100, 100); }");
 	else
 		currentScore->setStyleSheet("QLineEdit { background: rgb(255, 255, 255); }");
+}
+
+#include "..\..\MyNeuralNetwork\AbstractNetworkCore\Storage.hpp"
+#include <QFileDialog>
+void GameGUI::loadNetwork() {
+	auto filename = QFileDialog::getOpenFileName(this, tr("Open Neural Network"), "",
+												 tr("MyNeuralNetwork file (*.mnn)")).toStdString();
+	network = mnn::load_from_file(filename);
+	simulateGame();
+}
+
+#include "..\..\MyNeuralNetwork\AbstractNetworkCore\AbstractNetwork.hpp"
+#include <chrono>
+#include <thread>
+using namespace std::chrono_literals;
+auto const step = 500ms;
+void GameGUI::simulateGame() {
+	restart();
+	control_blocked = true;
+
+	while (!core->isOver()) {
+		auto f = core->getField()->getNormalizedCellValues();
+		network->calculate(f);
+		auto o = network->getOutputs();
+		bool turn = false;
+		if (o[0] > o[1])
+			if (o[0] > o[2])
+				if (o[0] > o[3])
+					turn = core->up();
+				else
+					turn = core->right();
+			else
+				if (o[2] > o[3])
+					turn = core->left();
+				else
+					turn = core->right();
+		else
+			if (o[1] > o[2])
+				if (o[1] > o[3])
+					turn = core->down();
+				else
+					turn = core->right();
+			else
+				if (o[2] > o[3])
+					turn = core->left();
+				else
+					turn = core->right();
+
+		field->update();
+		updateScore();
+		repaint();
+
+		if (!turn) break;
+		std::this_thread::sleep_for(step);
+	}
+
+	control_blocked = false;
 }
