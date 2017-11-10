@@ -137,35 +137,12 @@ void GameGUI::simulateGame() {
 		auto f = core->getField()->getNormalizedCellValues();
 		network->calculate(f);
 		auto o = network->getOutputs();
-		bool turn = false;
-		if (o[0] > o[1])
-			if (o[0] > o[2])
-				if (o[0] > o[3])
-					turn = core->up();
-				else
-					turn = core->right();
-			else
-				if (o[2] > o[3])
-					turn = core->left();
-				else
-					turn = core->right();
-		else
-			if (o[1] > o[2])
-				if (o[1] > o[3])
-					turn = core->down();
-				else
-					turn = core->right();
-			else
-				if (o[2] > o[3])
-					turn = core->left();
-				else
-					turn = core->right();
+		core->make_move(o[0], o[1], o[2], o[3]);
 
 		field->update();
 		updateScore();
 		repaint();
 
-		if (!turn) break;
 		std::this_thread::sleep_for(step);
 	}
 

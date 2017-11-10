@@ -211,6 +211,61 @@ public:
 		return st;
 	}
 
+	enum MoveID {
+		Move_up = 0,
+		Move_down = 1,
+		Move_left = 2,
+		Move_right = 3
+	};
+	bool make_move(MoveID id) {
+		switch (id) {
+			case Move_up: return up();
+			case Move_down: return down();
+			case Move_left: return left();
+			case Move_right: return right();
+			default: return false;
+		}
+	}
+	bool make_move(float up, float down, float left, float right) {
+		size_t rank[4];
+		if (up > down) {
+			rank[0] = Move_up;
+			rank[1] = Move_down;
+		} else {
+			rank[0] = Move_down;
+			rank[1] = Move_up;
+		}
+		if (left > rank[1]) {
+			rank[2] = rank[1];
+			if (left > rank[0]) {
+				rank[1] = rank[0];
+				rank[0] = Move_left;
+			} else
+				rank[1] = Move_left;
+		} else
+			rank[2] = Move_left;
+		if (right > rank[2]) {
+			rank[3] = rank[2];
+			if (right > rank[1]) {
+				rank[2] = rank[1];
+				if (right > rank[0]) {
+					rank[1] = rank[0];
+					rank[0] = Move_right;
+				} else
+					rank[1] = Move_right;
+			} else
+				rank[2] = Move_right;
+		} else
+			rank[3] = Move_right;
+
+		if (!make_move((MoveID) rank[0]))
+			if (!make_move((MoveID) rank[1]))
+				if (!make_move((MoveID) rank[2]))
+					if (!make_move((MoveID) rank[3]))
+						return false;
+		return true;
+	}
+
 	bool isOver() {
 		return m_isOver;
 	}
