@@ -68,36 +68,36 @@ void GameGUI::restart() {
 }
 
 bool GameGUI::eventFilter(QObject *o, QEvent *ev) {
-	if (!control_blocked && ev->type() == QEvent::KeyPress) {
-		switch (static_cast<QKeyEvent*>(ev)->key()) {
-			case Qt::Key::Key_Down:
-			case Qt::Key::Key_S:
-				core->down();
-				if (collectButton->isChecked())
-					collector->saveMove(Move::Down);
-				break;
-			case Qt::Key::Key_Left:
-			case Qt::Key::Key_A:
-				core->left();
-				if (collectButton->isChecked())
-					collector->saveMove(Move::Left);
-				break;
-			case Qt::Key::Key_Right:
-			case Qt::Key::Key_D:
-				core->right();
-				if (collectButton->isChecked())
-					collector->saveMove(Move::Right);
-				break;
-			case Qt::Key::Key_Up:
-			case Qt::Key::Key_W:
-				core->up();
-				if (collectButton->isChecked())
-					collector->saveMove(Move::Up);
-				break;
-			case Qt::Key::Key_Escape:
-				close();
-				break;
-		}
+	if (ev->type() == QEvent::KeyPress) {
+		if (!control_blocked) switch (static_cast<QKeyEvent*>(ev)->key()) {
+				case Qt::Key::Key_Down:
+				case Qt::Key::Key_S:
+					core->down();
+					if (collectButton->isChecked())
+						collector->saveMove(Move::Down);
+					break;
+				case Qt::Key::Key_Left:
+				case Qt::Key::Key_A:
+					core->left();
+					if (collectButton->isChecked())
+						collector->saveMove(Move::Left);
+					break;
+				case Qt::Key::Key_Right:
+				case Qt::Key::Key_D:
+					core->right();
+					if (collectButton->isChecked())
+						collector->saveMove(Move::Right);
+					break;
+				case Qt::Key::Key_Up:
+				case Qt::Key::Key_W:
+					core->up();
+					if (collectButton->isChecked())
+						collector->saveMove(Move::Up);
+					break;
+				case Qt::Key::Key_Escape:
+					close();
+					break;
+			}
 		field->update();
 		updateScore();
 		ev->accept();
@@ -128,7 +128,7 @@ void GameGUI::loadNetwork() {
 #include <chrono>
 #include <thread>
 using namespace std::chrono_literals;
-auto const step = 500ms;
+auto const step = 250ms;
 void GameGUI::simulateGame() {
 	restart();
 	control_blocked = true;
@@ -137,11 +137,13 @@ void GameGUI::simulateGame() {
 		auto f = core->getField()->getNormalizedCellValues();
 		network->calculate(f);
 		auto o = network->getOutputs();
-		core->make_move(o[0], o[1], o[2], o[3]);
+		auto result = core->make_move(o[0], o[1], o[2], o[3]);
 
 		field->update();
 		updateScore();
 		repaint();
+
+		if (!result) break;
 
 		std::this_thread::sleep_for(step);
 	}
