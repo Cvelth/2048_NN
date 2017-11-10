@@ -8,6 +8,10 @@
 #include "GameCore.hpp"
 #include "GameCollector.hpp"
 
+namespace mnn {
+	class AbstractNetwork;
+}
+
 class GameGUI : public QWidget {
 	Q_OBJECT
 
@@ -23,6 +27,7 @@ private:
 	QPushButton* newGame;
 	QPushButton* exit;
 	QPushButton* collectButton;
+	QPushButton* loadNetworkButton;
 	QHBoxLayout* buttons;
 
 	GameCore<4>* core;
@@ -30,11 +35,16 @@ private:
 	QVBoxLayout* layout;
 
 	GameCollector<4>* collector;
+	mnn::AbstractNetwork *network;
+
+	bool control_blocked;
 
 protected:
 	virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
-	protected slots:
+protected slots:
 	void restart();
 	void updateScore();
+	void loadNetwork();
+	void simulateGame();
 };
