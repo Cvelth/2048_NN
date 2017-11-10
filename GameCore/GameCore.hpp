@@ -34,7 +34,7 @@ public:
 		} else
 			m_isOver = true;
 	}
-	void down() {
+	bool down() {
 		bool st = false;
 		for (int i = 0; i < 4; i++) {
 			if (m_field.at(1, i) == 0) {
@@ -76,8 +76,9 @@ public:
 			}
 		}
 		if (st) step();
+		return st;
 	}
-	void left() {
+	bool left() {
 		bool st = false;
 		for (int i = 0; i < 4; i++) {
 			if (m_field.at(i, 2) == 0) {
@@ -119,8 +120,9 @@ public:
 			}
 		}
 		if (st) step();
+		return st;
 	}
-	void right() {
+	bool right() {
 		bool st = false;
 		for (int i = 0; i < 4; i++) {
 			if (m_field.at(i, 1) == 0) {
@@ -162,8 +164,9 @@ public:
 			}
 		}
 		if (st) step();
+		return st;
 	}
-	void up() {
+	bool up() {
 		bool st = false;
 		for (int i = 0; i < 4; i++) {
 			if (m_field.at(2, i) == 0) {
@@ -205,6 +208,7 @@ public:
 			}
 		}
 		if (st) step();
+		return st;
 	}
 
 	bool isOver() {

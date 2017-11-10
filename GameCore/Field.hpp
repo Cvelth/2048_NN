@@ -21,6 +21,18 @@ public:
 		return res;
 	}
 
+	inline std::vector<Type> getCellValues() const {
+		std::vector<Type> res;
+		for (size_t i = 0; i < FieldSize * FieldSize; i++)
+			res.push_back(m_cells[i]);
+		return res;
+	}
+	inline std::vector<float> getNormalizedCellValues() const {
+		std::vector<float> res;
+		for (size_t i = 0; i < FieldSize * FieldSize; i++)
+			res.push_back(m_cells[i] == 0.f ? 0.f : 1.f / m_cells[i]);
+		return res;
+	}
 	inline std::vector<Type*> getEmptyCells() {
 		std::vector<Type*> res;
 		for (size_t i = 0; i < FieldSize * FieldSize; i++)
