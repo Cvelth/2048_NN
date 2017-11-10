@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 				auto filename = s.str();
 				s.str("");
 
-				em.testPopulation(true);
+				float average = em.testPopulation(true);
 				size_t j = 0;
 				for (auto it : *em) {
 					s << j++ << "_" << it.first << ".mnn";
@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
 					if (j >= stored_networks)
 						break;
 				}
-				std::cout << "Generation_" << i << ":\t" << em->front().first << " <- " << em->back().first << "\n";
+				std::cout << "Generation_" << i << ":\t" << em->front().first << " <- " << average << " <- " << em->back().first << "\n";
 				em.populationSelection();
 				em.recreatePopulation();
 				em.mutatePopulation(unit_mutation_chance, link_mutation_chance);
