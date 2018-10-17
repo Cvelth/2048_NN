@@ -13,13 +13,21 @@ protected:
 	size_t m_score;
 	size_t m_record;
 
-public:
-	explicit GameCore() {
-		std::ifstream f("maximum.dat");
+protected:
+	void read_record(std::string const& filename) {
+		std::ifstream f(filename);
 		if (f.good())
 			f >> m_record;
 		else
 			m_record = 0;
+	}
+public:
+	explicit GameCore() {
+		read_record("maximum.dat");
+		restart();
+	}
+	explicit GameCore(unsigned int seed) : m_random(seed) {
+		read_record("maximum.dat");
 		restart();
 	}
 	~GameCore() {
