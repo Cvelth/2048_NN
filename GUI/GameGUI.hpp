@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -9,7 +11,7 @@
 #include "GameCollector.hpp"
 
 namespace mnn {
-	class AbstractNetwork;
+	class NeuralNetworkInterface;
 }
 
 class GameGUI : public QWidget {
@@ -35,7 +37,7 @@ private:
 	QVBoxLayout* layout;
 
 	GameCollector<4>* collector;
-	mnn::AbstractNetwork *network;
+	std::unique_ptr<mnn::NeuralNetworkInterface> network;
 
 	bool control_blocked;
 

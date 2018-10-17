@@ -57,8 +57,6 @@ GameGUI::~GameGUI() {
 	delete exit;
 	delete buttons;
 	delete layout;
-
-	if (network) delete network;
 }
 void GameGUI::restart() {
 	control_blocked = false;
@@ -115,7 +113,7 @@ void GameGUI::updateScore() {
 		currentScore->setStyleSheet("QLineEdit { background: rgb(255, 255, 255); }");
 }
 
-#include "..\..\MyNeuralNetwork\AbstractNetworkCore\Storage.hpp"
+#include "mnn/storage/Storage.hpp"
 #include <QFileDialog>
 void GameGUI::loadNetwork() {
 	auto filename = QFileDialog::getOpenFileName(this, tr("Open Neural Network"), "",
@@ -124,7 +122,7 @@ void GameGUI::loadNetwork() {
 	simulateGame();
 }
 
-#include "..\..\MyNeuralNetwork\AbstractNetworkCore\AbstractNetwork.hpp"
+#include "mnn/interfaces/NeuralNetworkInterface.hpp"
 #include <chrono>
 #include <thread>
 using namespace std::chrono_literals;
@@ -135,8 +133,8 @@ void GameGUI::simulateGame() {
 
 	while (!core->isOver()) {
 		auto f = core->getField()->getNormalizedCellValues();
-		network->calculate(f);
-		auto o = network->getOutputs();
+		network->process(f);
+		auto o = network->outputs();
 		auto result = core->make_move(o[0], o[1], o[2], o[3]);
 
 		field->update();
