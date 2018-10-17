@@ -27,8 +27,8 @@ public:
 			res.push_back(m_cells[i]);
 		return res;
 	}
-	inline std::vector<float> getNormalizedCellValues() const {
-		std::vector<float> res;
+	inline std::vector<double> getNormalizedCellValues() const {
+		std::vector<double> res;
 		for (size_t i = 0; i < FieldSize * FieldSize; i++)
 			res.push_back(m_cells[i] == 0.f ? 0.f : 1.f / m_cells[i]);
 		return res;
